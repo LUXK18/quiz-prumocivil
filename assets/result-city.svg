@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 900">
+  <defs><linearGradient id="s" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#765b83"/><stop offset=".44" stop-color="#e18a76"/><stop offset="1" stop-color="#f4ca91"/></linearGradient><linearGradient id="street" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#38515c"/><stop offset="1" stop-color="#162f34"/></linearGradient></defs>
+  <rect width="720" height="900" fill="url(#s)"/>
+  <circle cx="580" cy="151" r="64" fill="#ffe6a4" opacity=".9"/>
+  <g fill="#344b56"><path d="M0 250h128v650H0z"/><path d="M145 320h105v580H145z"/><path d="M267 198h148v702H267z"/><path d="M432 284h113v616H432z"/><path d="M562 228h158v672H562z"/></g>
+  <g fill="#ffd67e"><path d="M28 291h22v32H28zm48 0h22v32H76zm-48 67h22v32H28zm48 0h22v32H76zm95-2h20v30h-20zm42 0h20v30h-20zm80-111h24v34h-24zm51 0h24v34h-24zm-51 69h24v34h-24zm51 0h24v34h-24zm112 13h21v32h-21zm47 0h21v32h-21zm90-45h24v34h-24zm52 0h24v34h-24zm-52 68h24v34h-24zm52 0h24v34h-24z"/></g>
+  <path d="M241 900 353 499l133 401H241Z" fill="url(#street)"/>
+  <path d="m338 900 37-309 42 309h-79Z" fill="#526f6c"/>
+  <path d="M375 596v304" stroke="#f5d478" stroke-width="7" stroke-dasharray="25 24"/>
+  <g fill="#173b39"><circle cx="117" cy="733" r="66"/><rect x="106" y="730" width="22" height="170" rx="11"/><circle cx="624" cy="744" r="75"/><rect x="612" y="741" width="24" height="159" rx="12"/></g>
+  <g fill="#e6ff70"><path d="m171 184 7 18 19 7-19 7-7 19-7-19-19-7 19-7 7-18Z"/></g>
+</svg>

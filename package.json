@@ -1,0 +1,16 @@
+{
+  "name": "rota-quiz",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Quiz responsivo e configuravel por JSON.",
+  "scripts": {
+    "dev": "node server.mjs",
+    "start": "node server.mjs",
+    "test": "node --test",
+    "check": "node --check src/app.js && node --check src/quiz-core.mjs && node --test"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

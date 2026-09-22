@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#eef1e8" />
+    <meta name="description" content="Descubra a experiência que combina com o seu momento." />
+    <title>Rota — Descubra sua próxima experiência</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Ir para o conteúdo</a>
+
+    <div class="ambient ambient-one" aria-hidden="true"></div>
+    <div class="ambient ambient-two" aria-hidden="true"></div>
+    <div class="grain" aria-hidden="true"></div>
+
+    <main id="main-content" class="page-shell">
+      <article class="quiz-card" aria-busy="true">
+        <header class="topbar">
+          <div class="brand-lockup">
+            <img id="brand-logo" class="brand-logo" src="assets/logo.svg" alt="Rota" />
+          </div>
+          <div id="step-counter" class="step-counter" hidden>
+            <span class="step-counter-dot" aria-hidden="true"></span>
+            <span id="step-counter-text">Etapa 1 de 4</span>
+          </div>
+        </header>
+
+        <div id="loading-screen" class="screen loading-screen" role="status">
+          <span class="loader" aria-hidden="true"></span>
+          <p>Preparando sua experiência…</p>
+        </div>
+
+        <section id="intro-screen" class="screen intro-screen" hidden aria-labelledby="intro-title">
+          <div class="intro-copy">
+            <p id="intro-eyebrow" class="eyebrow"></p>
+            <h1 id="intro-title" tabindex="-1"></h1>
+            <p id="intro-description" class="lead"></p>
+
+            <button id="start-button" class="button button-primary button-large" type="button">
+              <span id="start-button-label">Começar agora</span>
+              <svg viewBox="0 0 20 20" aria-hidden="true">
+                <path d="M4 10h11M11 5l5 5-5 5" />
+              </svg>
+            </button>
+            <p id="time-estimate" class="time-estimate">
+              <svg viewBox="0 0 20 20" aria-hidden="true">
+                <circle cx="10" cy="10" r="7" />
+                <path d="M10 6v4l2.5 1.5" />
+              </svg>
+              <span></span>
+            </p>
+          </div>
+
+          <div class="intro-art" aria-hidden="true">
+            <div class="postcard postcard-back">
+              <img src="assets/intro-mountain.svg" alt="" />
+            </div>
+            <div class="postcard postcard-front">
+              <img src="assets/intro-coast.svg" alt="" />
+              <span class="postcard-stamp">vá<br />viver</span>
+            </div>
+            <span class="orbit-label orbit-label-top">novos ares</span>
+            <span class="orbit-label orbit-label-bottom">do seu jeito</span>
+          </div>
+        </section>
+
+        <section id="question-screen" class="screen question-screen" hidden aria-labelledby="stage-title">
+          <div class="question-heading">
+            <p id="stage-eyebrow" class="eyebrow"></p>
+            <h1 id="stage-title" tabindex="-1"></h1>
+            <p id="stage-description" class="stage-description"></p>
+          </div>
+
+          <form id="question-form" novalidate>
+            <fieldset>
+              <legend id="question-legend" class="sr-only"></legend>
+              <div id="options" class="options"></div>
+              <p id="validation-message" class="validation-message" role="alert" tabindex="-1" hidden>
+                Escolha uma alternativa para continuar.
+              </p>
+            </fieldset>
+          </form>
+        </section>
+
+        <section id="result-screen" class="screen result-screen" hidden aria-labelledby="result-title">
+          <div class="result-visual">
+            <img id="result-image" src="assets/result-coast.svg" alt="" />
+            <span id="result-badge" class="result-badge"></span>
+            <span class="result-spark result-spark-one" aria-hidden="true">✦</span>
+            <span class="result-spark result-spark-two" aria-hidden="true">✦</span>
+          </div>
+          <div class="result-copy">
+            <p id="result-eyebrow" class="eyebrow"></p>
+            <h1 id="result-title" tabindex="-1"></h1>
+            <p id="result-description" class="stage-description"></p>
+            <a id="result-cta" class="button button-primary button-large" href="#">
+              <span></span>
+              <svg viewBox="0 0 20 20" aria-hidden="true">
+                <path d="M4 10h11M11 5l5 5-5 5" />
+              </svg>
+            </a>
+          </div>
+        </section>
+
+        <section id="error-screen" class="screen error-screen" hidden role="alert" aria-labelledby="error-title">
+          <div class="error-icon" aria-hidden="true">!</div>
+          <p class="eyebrow">Algo saiu da rota</p>
+          <h1 id="error-title">Não foi possível carregar o quiz.</h1>
+          <p id="error-message" class="stage-description"></p>
+          <button id="retry-button" class="button button-primary" type="button">Tentar novamente</button>
+        </section>
+
+        <footer id="quiz-footer" class="quiz-footer" hidden>
+          <div class="progress-copy">
+            <span id="progress-label">Seu progresso</span>
+            <strong id="progress-value">20%</strong>
+          </div>
+          <div
+            id="progress-track"
+            class="progress-track"
+            role="progressbar"
+            aria-label="Progresso do quiz"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-valuenow="20"
+          >
+            <span id="progress-bar" class="progress-bar"></span>
+          </div>
+          <div class="navigation-actions">
+            <button id="back-button" class="button button-secondary" type="button">
+              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M16 10H5M9 5l-5 5 5 5" /></svg>
+              Voltar
+            </button>
+            <button id="next-button" class="button button-primary" type="button">
+              <span>Continuar</span>
+              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" /></svg>
+            </button>
+          </div>
+        </footer>
+      </article>
+
+      <p class="config-note">
+        Conteúdo gerenciado por <code>quiz-config.json</code>
+      </p>
+    </main>
+
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+    <noscript>Ative o JavaScript para responder ao quiz.</noscript>
+    <script type="module" src="src/app.js"></script>
+  </body>
+</html>

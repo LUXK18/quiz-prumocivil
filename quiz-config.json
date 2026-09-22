@@ -1,0 +1,205 @@
+{
+  "version": 2,
+  "quiz": {
+    "id": "descubra-seu-proximo-destino",
+    "name": "Quiz Rota",
+    "locale": "pt-BR",
+    "documentTitle": "Rota — Descubra sua próxima experiência",
+    "persistAnswers": true
+  },
+  "brand": {
+    "name": "Rota",
+    "logo": "assets/logo.svg",
+    "logoAlt": "Rota"
+  },
+  "theme": {
+    "primary": "#EB551F",
+    "primaryDark": "#0d4a3c",
+    "accent": "#e6ff70",
+    "surface": "#ffffff",
+    "background": "#eef1e8",
+    "text": "#15332b",
+    "muted": "#66746f"
+  },
+  "intro": {
+    "eyebrow": "Seu próximo capítulo começa aqui",
+    "title": "Qual experiência combina com o seu momento?",
+    "description": "Responda a três perguntas rápidas e receba uma inspiração de viagem feita para você.",
+    "buttonLabel": "Começar agora",
+    "timeEstimate": "Leva menos de 1 minuto"
+  },
+  "stages": [
+    {
+      "id": "ritmo",
+      "type": "list",
+      "eyebrow": "Primeiro, o seu ritmo",
+      "title": "Como você gosta de aproveitar os dias livres?",
+      "description": "Escolha a alternativa que mais se parece com você.",
+      "required": true,
+      "options": [
+        {
+          "id": "sem-pressa",
+          "label": "Sem pressa, com tempo para observar tudo",
+          "scores": {
+            "litoral": 2,
+            "natureza": 1
+          }
+        },
+        {
+          "id": "movimento",
+          "label": "Em movimento, descobrindo algo a cada hora",
+          "scores": {
+            "cidade": 2,
+            "montanha": 1
+          }
+        },
+        {
+          "id": "aventura",
+          "label": "Com uma boa dose de aventura",
+          "scores": {
+            "montanha": 2,
+            "natureza": 1
+          }
+        },
+        {
+          "id": "equilibrio",
+          "label": "Um pouco de descanso e um pouco de novidade",
+          "scores": {
+            "litoral": 1,
+            "cidade": 1,
+            "natureza": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "cenario",
+      "type": "gallery",
+      "eyebrow": "Agora, siga o olhar",
+      "title": "Qual cenário faz você querer arrumar as malas?",
+      "description": "Não pense muito — escolha o que despertou sua curiosidade primeiro.",
+      "required": true,
+      "options": [
+        {
+          "id": "mar",
+          "label": "Mar aberto",
+          "image": "assets/beach.svg",
+          "alt": "Praia tranquila entre pedras e vegetação",
+          "scores": {
+            "litoral": 3
+          }
+        },
+        {
+          "id": "altitude",
+          "label": "Grandes altitudes",
+          "image": "assets/mountain.svg",
+          "alt": "Montanhas sob a luz do amanhecer",
+          "scores": {
+            "montanha": 3
+          }
+        },
+        {
+          "id": "ruas",
+          "label": "Ruas cheias de vida",
+          "image": "assets/city.svg",
+          "alt": "Cidade colorida ao entardecer",
+          "scores": {
+            "cidade": 3
+          }
+        },
+        {
+          "id": "verde",
+          "label": "Verde por todos os lados",
+          "image": "assets/forest.svg",
+          "alt": "Caminho cercado por uma floresta exuberante",
+          "scores": {
+            "natureza": 3
+          }
+        }
+      ]
+    },
+    {
+      "id": "companhia",
+      "type": "list",
+      "eyebrow": "Última pergunta",
+      "title": "Com quem você imagina viver essa experiência?",
+      "description": "Sua resposta ajuda a deixar a sugestão mais certeira.",
+      "required": true,
+      "options": [
+        {
+          "id": "solo",
+          "label": "Só comigo e a liberdade de mudar os planos",
+          "scores": {
+            "cidade": 1,
+            "montanha": 1
+          }
+        },
+        {
+          "id": "dupla",
+          "label": "Com alguém especial, colecionando memórias",
+          "scores": {
+            "litoral": 2
+          }
+        },
+        {
+          "id": "amigos",
+          "label": "Com amigos e muitas histórias para contar",
+          "scores": {
+            "cidade": 2
+          }
+        },
+        {
+          "id": "familia",
+          "label": "Com a família, em um roteiro para todos",
+          "scores": {
+            "natureza": 2
+          }
+        }
+      ]
+    }
+  ],
+  "result": {
+    "eyebrow": "Seu resultado chegou",
+    "cta": {
+      "label": "Explorar experiências",
+      "url": "https://example.com/experiencias",
+      "target": "_blank"
+    },
+    "profiles": {
+      "litoral": {
+        "title": "Seu momento pede horizonte aberto",
+        "description": "Você combina com dias leves, água por perto e uma agenda com espaço para o inesperado. Um refúgio no litoral pode ser exatamente a pausa que faltava.",
+        "image": "assets/result-coast.svg",
+        "alt": "Janela aberta para um litoral ensolarado",
+        "badge": "Alma solar"
+      },
+      "montanha": {
+        "title": "Seu próximo destino fica lá no alto",
+        "description": "Novos caminhos, ar puro e a sensação de chegar mais longe movem você. Uma jornada entre montanhas tem tudo para virar uma grande história.",
+        "image": "assets/result-mountain.svg",
+        "alt": "Pessoa contemplando montanhas ao amanhecer",
+        "badge": "Espírito aventureiro"
+      },
+      "cidade": {
+        "title": "Você vibra com descobertas urbanas",
+        "description": "Cultura, sabores e encontros inesperados fazem seu roteiro ideal. Uma cidade cheia de personalidade é o cenário perfeito para a sua curiosidade.",
+        "image": "assets/result-city.svg",
+        "alt": "Vista de uma cidade vibrante ao entardecer",
+        "badge": "Explorador urbano"
+      },
+      "natureza": {
+        "title": "A natureza é o seu melhor endereço",
+        "description": "Você procura conexão, silêncio e beleza sem filtros. Um destino cercado de verde pode devolver a energia e abrir espaço para novas ideias.",
+        "image": "assets/result-nature.svg",
+        "alt": "Cabana acolhedora em meio à floresta",
+        "badge": "Essência natural"
+      }
+    }
+  },
+  "analytics": {
+    "enabled": true,
+    "containerId": "",
+    "eventPrefix": "rota_quiz",
+    "debug": true
+  }
+}

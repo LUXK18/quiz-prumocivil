@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <defs><linearGradient id="s" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#b9dfdc"/><stop offset="1" stop-color="#f8e4b7"/></linearGradient><linearGradient id="w" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#207d78"/><stop offset="1" stop-color="#64b6a8"/></linearGradient></defs>
+  <rect width="800" height="500" fill="url(#s)"/>
+  <circle cx="615" cy="101" r="51" fill="#fff6c6"/>
+  <path d="M0 254c162-38 324-31 485 21 103 33 208 34 315 11v214H0V254Z" fill="url(#w)"/>
+  <path d="M0 398c152-49 274-34 397 14 138 54 267 50 403 14v74H0v-102Z" fill="#ead29d"/>
+  <path d="M136 0c-8 158 22 315 91 500M676 0c-14 176-42 343-91 500" stroke="#76523b" stroke-width="28"/>
+  <path d="M196 167c141 62 281 65 421 8-22 155-364 163-421-8Z" fill="#fff0cf" stroke="#176b55" stroke-width="9"/>
+  <path d="M216 184c142 45 267 47 378 7" fill="none" stroke="#db755a" stroke-width="12" stroke-dasharray="22 14"/>
+  <g fill="#2b775a"><path d="m88 74 103 19-77-72Z"/><path d="m112 125 92 35-57-88Z"/><path d="m599 52 98 28-69-84Z"/><path d="m583 111 109 30-78-90Z"/></g>
+</svg>
