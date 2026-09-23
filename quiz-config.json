@@ -518,8 +518,8 @@
   },
   "analytics": {
     "enabled": true,
-    "containerId": "",
+    "containerId": "GTM-THPLCGLN",
     "eventPrefix": "prumo_civil_quiz",
-    "debug": true
+    "debug": false
   }
 }
