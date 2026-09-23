@@ -3,9 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#eef1e8" />
-    <meta name="description" content="Descubra a experiência que combina com o seu momento." />
-    <title>Rota — Descubra sua próxima experiência</title>
+    <meta name="theme-color" content="#EEE9E0" />
+    <meta
+      name="description"
+      content="Encontre um ponto de partida para usar IA nas suas tarefas de engenharia civil."
+    />
+    <title>Prumo Civil — IA aplicada à engenharia</title>
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="styles.css" />
   </head>
@@ -20,17 +23,16 @@
       <article class="quiz-card" aria-busy="true">
         <header class="topbar">
           <div class="brand-lockup">
-            <img id="brand-logo" class="brand-logo" src="assets/logo.svg" alt="Rota" />
+            <img id="brand-logo" class="brand-logo" src="assets/logo.svg" alt="Prumo Civil" />
           </div>
           <div id="step-counter" class="step-counter" hidden>
-            <span class="step-counter-dot" aria-hidden="true"></span>
-            <span id="step-counter-text">Etapa 1 de 4</span>
+            <span id="step-counter-text">Etapa 1 de 6</span>
           </div>
         </header>
 
         <div id="loading-screen" class="screen loading-screen" role="status">
           <span class="loader" aria-hidden="true"></span>
-          <p>Preparando sua experiência…</p>
+          <p>Preparando seu quiz…</p>
         </div>
 
         <section id="intro-screen" class="screen intro-screen" hidden aria-labelledby="intro-title">
@@ -54,17 +56,6 @@
             </p>
           </div>
 
-          <div class="intro-art" aria-hidden="true">
-            <div class="postcard postcard-back">
-              <img src="assets/intro-mountain.svg" alt="" />
-            </div>
-            <div class="postcard postcard-front">
-              <img src="assets/intro-coast.svg" alt="" />
-              <span class="postcard-stamp">vá<br />viver</span>
-            </div>
-            <span class="orbit-label orbit-label-top">novos ares</span>
-            <span class="orbit-label orbit-label-bottom">do seu jeito</span>
-          </div>
         </section>
 
         <section id="question-screen" class="screen question-screen" hidden aria-labelledby="stage-title">
@@ -85,29 +76,93 @@
           </form>
         </section>
 
-        <section id="result-screen" class="screen result-screen" hidden aria-labelledby="result-title">
-          <div class="result-visual">
-            <img id="result-image" src="assets/result-coast.svg" alt="" />
-            <span id="result-badge" class="result-badge"></span>
-            <span class="result-spark result-spark-one" aria-hidden="true">✦</span>
-            <span class="result-spark result-spark-two" aria-hidden="true">✦</span>
+        <section
+          id="transition-screen"
+          class="screen transition-screen"
+          hidden
+          aria-labelledby="transition-title"
+          aria-describedby="transition-description"
+        >
+          <div class="transition-content">
+            <p id="transition-eyebrow" class="eyebrow"></p>
+            <h1 id="transition-title" tabindex="-1"></h1>
+            <p id="transition-description" class="stage-description"></p>
+            <button id="transition-button" class="button button-primary button-large" type="button">
+              <span id="transition-button-label">Continuar</span>
+              <svg viewBox="0 0 20 20" aria-hidden="true">
+                <path d="M4 10h11M11 5l5 5-5 5" />
+              </svg>
+            </button>
           </div>
-          <div class="result-copy">
+        </section>
+
+        <section id="result-screen" class="screen result-screen" hidden aria-labelledby="result-title">
+          <div id="result-visual" class="result-visual" hidden>
+            <img id="result-image" alt="" />
+          </div>
+
+          <div class="result-copy result-hero">
             <p id="result-eyebrow" class="eyebrow"></p>
             <h1 id="result-title" tabindex="-1"></h1>
             <p id="result-description" class="stage-description"></p>
+          </div>
+
+          <section
+            id="result-benefit"
+            class="result-panel result-benefit"
+            aria-labelledby="result-benefit-title"
+          >
+            <h2 id="result-benefit-title"></h2>
+            <p id="result-benefit-description"></p>
+          </section>
+
+          <section
+            id="result-application"
+            class="result-panel result-application"
+            aria-labelledby="result-application-label"
+          >
+            <p id="result-application-label" class="result-section-label"></p>
+            <h2 id="result-application-value"></h2>
+            <ol id="result-steps" class="result-steps"></ol>
+          </section>
+
+          <section id="result-offer" class="result-offer" aria-labelledby="result-offer-title">
+            <header class="result-offer-heading">
+              <p id="result-offer-eyebrow" class="eyebrow"></p>
+              <h2 id="result-offer-title"></h2>
+              <p id="result-offer-description"></p>
+            </header>
+
+            <div class="result-offer-group">
+              <h3>O que você recebe</h3>
+              <ul id="result-deliverables" class="result-feature-list"></ul>
+            </div>
+
+            <section
+              id="result-bonuses-section"
+              class="result-offer-group result-bonuses-section"
+              aria-labelledby="result-bonuses-title"
+            >
+              <h3 id="result-bonuses-title">Bônus incluídos</h3>
+              <ul id="result-bonuses" class="result-feature-list result-bonuses"></ul>
+            </section>
+
+            <p id="result-responsibility" class="result-responsibility"></p>
+
             <a id="result-cta" class="button button-primary button-large" href="#">
               <span></span>
               <svg viewBox="0 0 20 20" aria-hidden="true">
                 <path d="M4 10h11M11 5l5 5-5 5" />
               </svg>
             </a>
-          </div>
+
+            <p id="result-closing" class="result-closing"></p>
+          </section>
         </section>
 
         <section id="error-screen" class="screen error-screen" hidden role="alert" aria-labelledby="error-title">
           <div class="error-icon" aria-hidden="true">!</div>
-          <p class="eyebrow">Algo saiu da rota</p>
+          <p class="eyebrow">Não foi possível continuar</p>
           <h1 id="error-title">Não foi possível carregar o quiz.</h1>
           <p id="error-message" class="stage-description"></p>
           <button id="retry-button" class="button button-primary" type="button">Tentar novamente</button>
@@ -142,9 +197,7 @@
         </footer>
       </article>
 
-      <p class="config-note">
-        Conteúdo gerenciado por <code>quiz-config.json</code>
-      </p>
+      <p class="config-note">© 2026 Prumo Civil. Todos os direitos reservados.</p>
     </main>
 
     <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>

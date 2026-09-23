@@ -1,205 +1,525 @@
 {
-  "version": 2,
+  "version": 3,
   "quiz": {
-    "id": "descubra-seu-proximo-destino",
-    "name": "Quiz Rota",
+    "id": "prumo-civil-ia",
+    "name": "Quiz Prumo Civil",
     "locale": "pt-BR",
-    "documentTitle": "Rota — Descubra sua próxima experiência",
+    "documentTitle": "Prumo Civil — IA aplicada à engenharia civil",
     "persistAnswers": true
   },
   "brand": {
-    "name": "Rota",
+    "name": "Prumo Civil",
     "logo": "assets/logo.svg",
-    "logoAlt": "Rota"
+    "logoAlt": "Prumo Civil"
   },
   "theme": {
     "primary": "#EB551F",
-    "primaryDark": "#0d4a3c",
-    "accent": "#e6ff70",
-    "surface": "#ffffff",
-    "background": "#eef1e8",
-    "text": "#15332b",
-    "muted": "#66746f"
+    "primaryDark": "#000000",
+    "accent": "#EB551F",
+    "surface": "#F7F4EE",
+    "background": "#EEE9E0",
+    "text": "#050505",
+    "muted": "#4F4A45"
   },
   "intro": {
-    "eyebrow": "Seu próximo capítulo começa aqui",
-    "title": "Qual experiência combina com o seu momento?",
-    "description": "Responda a três perguntas rápidas e receba uma inspiração de viagem feita para você.",
-    "buttonLabel": "Começar agora",
-    "timeEstimate": "Leva menos de 1 minuto"
+    "eyebrow": "IA aplicada à sua rotina de engenharia",
+    "title": "Você sabe o que precisa entregar. Mas quanto trabalho dá preparar tudo?",
+    "description": "Responda a 6 perguntas e encontre um ponto de partida para usar IA nas suas tarefas de engenharia civil.",
+    "buttonLabel": "Encontrar meu ponto de partida",
+    "timeEstimate": "6 perguntas rápidas"
   },
   "stages": [
     {
-      "id": "ritmo",
+      "id": "rotina",
       "type": "list",
-      "eyebrow": "Primeiro, o seu ritmo",
-      "title": "Como você gosta de aproveitar os dias livres?",
-      "description": "Escolha a alternativa que mais se parece com você.",
+      "aida": "atencao",
+      "eyebrow": "Primeiro, a sua rotina",
+      "title": "Qual entrega mais aparece na sua rotina?",
+      "description": "Escolha a alternativa que mais se aproxima do seu trabalho hoje.",
       "required": true,
       "options": [
         {
-          "id": "sem-pressa",
-          "label": "Sem pressa, com tempo para observar tudo",
+          "id": "documentos",
+          "label": "Documentos, relatórios e memoriais",
           "scores": {
-            "litoral": 2,
-            "natureza": 1
+            "documentos": 1
           }
         },
         {
-          "id": "movimento",
-          "label": "Em movimento, descobrindo algo a cada hora",
+          "id": "obra",
+          "label": "Registros de obra e acompanhamento de equipes",
           "scores": {
-            "cidade": 2,
-            "montanha": 1
+            "obra": 1
           }
         },
         {
-          "id": "aventura",
-          "label": "Com uma boa dose de aventura",
+          "id": "comercial",
+          "label": "Propostas, orçamentos e respostas a clientes",
           "scores": {
-            "montanha": 2,
-            "natureza": 1
+            "comercial": 1
           }
         },
         {
-          "id": "equilibrio",
-          "label": "Um pouco de descanso e um pouco de novidade",
+          "id": "projetos",
+          "label": "Projetos e organização de informações técnicas",
           "scores": {
-            "litoral": 1,
-            "cidade": 1,
-            "natureza": 1
+            "projetos": 1
           }
         }
       ]
     },
     {
-      "id": "cenario",
-      "type": "gallery",
-      "eyebrow": "Agora, siga o olhar",
-      "title": "Qual cenário faz você querer arrumar as malas?",
-      "description": "Não pense muito — escolha o que despertou sua curiosidade primeiro.",
+      "id": "dificuldade",
+      "type": "list",
+      "aida": "interesse",
+      "eyebrow": "Agora, pense na preparação",
+      "title": "Na hora de preparar essa entrega, onde você mais costuma travar?",
+      "description": "Pense em como isso acontece no seu dia a dia.",
       "required": true,
       "options": [
         {
-          "id": "mar",
-          "label": "Mar aberto",
-          "image": "assets/beach.svg",
-          "alt": "Praia tranquila entre pedras e vegetação",
+          "id": "comecar",
+          "label": "Na primeira versão: decidir como começar e organizar",
           "scores": {
-            "litoral": 3
+            "estrutura": 1
           }
         },
         {
-          "id": "altitude",
-          "label": "Grandes altitudes",
-          "image": "assets/mountain.svg",
-          "alt": "Montanhas sob a luz do amanhecer",
+          "id": "adaptar",
+          "label": "Na adaptação: encontrar um modelo que sirva para o caso",
           "scores": {
-            "montanha": 3
+            "adaptacao": 1
           }
         },
         {
-          "id": "ruas",
-          "label": "Ruas cheias de vida",
-          "image": "assets/city.svg",
-          "alt": "Cidade colorida ao entardecer",
+          "id": "reunir",
+          "label": "Na preparação: reunir informações e completar o conteúdo",
           "scores": {
-            "cidade": 3
+            "organizacao": 1
           }
         },
         {
-          "id": "verde",
-          "label": "Verde por todos os lados",
-          "image": "assets/forest.svg",
-          "alt": "Caminho cercado por uma floresta exuberante",
+          "id": "processo-organizado",
+          "label": "Não costumo travar; já tenho um processo organizado",
           "scores": {
-            "natureza": 3
+            "ampliacao": 1
           }
         }
       ]
     },
     {
-      "id": "companhia",
+      "id": "metodo-atual",
       "type": "list",
+      "aida": "interesse",
+      "eyebrow": "Seu jeito de trabalhar",
+      "title": "Como você costuma resolver essa parte hoje?",
+      "description": "Escolha o caminho que você usa com mais frequência.",
+      "required": true,
+      "options": [
+        {
+          "id": "manual",
+          "label": "Escrevo e organizo tudo por conta própria",
+          "scores": {
+            "primeiros-passos": 1
+          }
+        },
+        {
+          "id": "modelos",
+          "label": "Adapto arquivos e modelos de trabalhos anteriores",
+          "scores": {
+            "adaptacao": 1
+          }
+        },
+        {
+          "id": "ia-com-ajustes",
+          "label": "Peço ajuda à IA, mas preciso ajustar bastante a resposta",
+          "scores": {
+            "orientacao-ia": 1
+          }
+        },
+        {
+          "id": "ia-organizada",
+          "label": "Uso IA com instruções e modelos que já organizei",
+          "scores": {
+            "ampliacao": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "consequencia",
+      "type": "list",
+      "aida": "desejo",
+      "eyebrow": "O efeito na sua rotina",
+      "title": "Quando uma entrega exige mais preparação do que você esperava, o que costuma acontecer?",
+      "description": "Escolha a consequência mais comum para você.",
+      "required": true,
+      "options": [
+        {
+          "id": "menos-revisao",
+          "label": "Sobra menos tempo para conferir os detalhes",
+          "scores": {
+            "revisao": 1
+          }
+        },
+        {
+          "id": "acumulo",
+          "label": "Outras tarefas e respostas ficam para depois",
+          "scores": {
+            "fluidez": 1
+          }
+        },
+        {
+          "id": "fora-do-horario",
+          "label": "Acabo terminando depois do expediente",
+          "scores": {
+            "tempo": 1
+          }
+        },
+        {
+          "id": "sem-impacto",
+          "label": "Consigo absorver o trabalho sem afetar minha rotina",
+          "scores": {
+            "conveniencia": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "melhoria",
+      "type": "list",
+      "aida": "desejo",
+      "eyebrow": "Escolha o que quer melhorar",
+      "title": "O que seria mais útil na sua próxima entrega?",
+      "description": "Pense em uma melhoria que você gostaria de experimentar.",
+      "required": true,
+      "options": [
+        {
+          "id": "estrutura-inicial",
+          "label": "Ter uma estrutura inicial para adaptar",
+          "scores": {
+            "estrutura": 2
+          }
+        },
+        {
+          "id": "organizar-informacoes",
+          "label": "Organizar as informações antes de escrever",
+          "scores": {
+            "organizacao": 2
+          }
+        },
+        {
+          "id": "orientar-ia",
+          "label": "Orientar a IA para receber uma resposta mais alinhada",
+          "scores": {
+            "orientacao-ia": 2
+          }
+        },
+        {
+          "id": "padronizar",
+          "label": "Padronizar tarefas que se repetem",
+          "scores": {
+            "padronizacao": 2
+          }
+        }
+      ]
+    },
+    {
+      "id": "primeira-aplicacao",
+      "type": "list",
+      "aida": "acao",
       "eyebrow": "Última pergunta",
-      "title": "Com quem você imagina viver essa experiência?",
-      "description": "Sua resposta ajuda a deixar a sugestão mais certeira.",
+      "title": "Por qual tarefa você gostaria de começar?",
+      "description": "Escolha uma aplicação para experimentar primeiro.",
       "required": true,
-      "options": [
-        {
-          "id": "solo",
-          "label": "Só comigo e a liberdade de mudar os planos",
-          "scores": {
-            "cidade": 1,
-            "montanha": 1
+      "optionsSource": {
+        "stageId": "rotina",
+        "match": "optionId"
+      },
+      "optionsByAnswer": {
+        "documentos": [
+          {
+            "id": "memorial",
+            "label": "Estruturar um memorial descritivo",
+            "scores": {
+              "documentos": 1
+            }
+          },
+          {
+            "id": "relatorio-vistoria",
+            "label": "Preparar um relatório de vistoria",
+            "scores": {
+              "documentos": 1
+            }
+          },
+          {
+            "id": "dossie",
+            "label": "Organizar um dossiê técnico",
+            "scores": {
+              "documentos": 1
+            }
+          },
+          {
+            "id": "checklist-revisao",
+            "label": "Montar um checklist de revisão",
+            "scores": {
+              "documentos": 1
+            }
           }
-        },
-        {
-          "id": "dupla",
-          "label": "Com alguém especial, colecionando memórias",
-          "scores": {
-            "litoral": 2
+        ],
+        "obra": [
+          {
+            "id": "rdo",
+            "label": "Preparar um diário de obra",
+            "scores": {
+              "obra": 1
+            }
+          },
+          {
+            "id": "reuniao",
+            "label": "Organizar uma reunião de acompanhamento",
+            "scores": {
+              "obra": 1
+            }
+          },
+          {
+            "id": "relatorio-avanco",
+            "label": "Estruturar um relatório de avanço",
+            "scores": {
+              "obra": 1
+            }
+          },
+          {
+            "id": "comunicacao-fornecedor",
+            "label": "Preparar uma comunicação com fornecedor",
+            "scores": {
+              "obra": 1
+            }
           }
-        },
-        {
-          "id": "amigos",
-          "label": "Com amigos e muitas histórias para contar",
-          "scores": {
-            "cidade": 2
+        ],
+        "comercial": [
+          {
+            "id": "proposta",
+            "label": "Estruturar uma proposta comercial",
+            "scores": {
+              "comercial": 1
+            }
+          },
+          {
+            "id": "escopo",
+            "label": "Organizar o escopo de um serviço",
+            "scores": {
+              "comercial": 1
+            }
+          },
+          {
+            "id": "resposta-cliente",
+            "label": "Preparar uma resposta ao cliente",
+            "scores": {
+              "comercial": 1
+            }
+          },
+          {
+            "id": "informacoes-orcamento",
+            "label": "Organizar informações para um orçamento",
+            "scores": {
+              "comercial": 1
+            }
           }
-        },
-        {
-          "id": "familia",
-          "label": "Com a família, em um roteiro para todos",
-          "scores": {
-            "natureza": 2
+        ],
+        "projetos": [
+          {
+            "id": "premissas",
+            "label": "Organizar premissas e dados de entrada",
+            "scores": {
+              "projetos": 1
+            }
+          },
+          {
+            "id": "memorial-projeto",
+            "label": "Estruturar um memorial de projeto",
+            "scores": {
+              "projetos": 1
+            }
+          },
+          {
+            "id": "compatibilizacao",
+            "label": "Montar um checklist de compatibilização",
+            "scores": {
+              "projetos": 1
+            }
+          },
+          {
+            "id": "pendencias",
+            "label": "Registrar pendências para revisão",
+            "scores": {
+              "projetos": 1
+            }
           }
+        ]
+      }
+    }
+  ],
+  "transitions": [
+    {
+      "id": "preparacao",
+      "afterStageId": "metodo-atual",
+      "eyebrow": "Da informação à primeira versão",
+      "title": "Preparar também faz parte da entrega.",
+      "description": "Antes de conferir o resultado, é preciso reunir informações, definir uma estrutura e preparar o conteúdo. Instruções reutilizáveis podem ajudar a orientar a IA nessa etapa.",
+      "buttonLabel": "Continuar",
+      "variants": [
+        {
+          "when": {
+            "stageId": "dificuldade",
+            "optionId": "processo-organizado"
+          },
+          "title": "Você já tem um ponto de partida organizado.",
+          "description": "O próximo passo pode ser identificar outras tarefas em que vale a pena reutilizar instruções e modelos. Vamos encontrar uma aplicação que faça sentido para você."
         }
       ]
+    },
+    {
+      "id": "apresentacao-produto",
+      "afterStageId": "melhoria",
+      "eyebrow": "Conheça o Prumo Civil",
+      "title": "Instruções de IA organizadas por tarefas de engenharia civil.",
+      "description": "Você fornece os dados do trabalho, usa o material para orientar a preparação e confere o resultado antes de aplicar. Agora, escolha por qual tarefa gostaria de começar.",
+      "buttonLabel": "Escolher minha primeira aplicação"
     }
   ],
   "result": {
-    "eyebrow": "Seu resultado chegou",
-    "cta": {
-      "label": "Explorar experiências",
-      "url": "https://example.com/experiencias",
-      "target": "_blank"
+    "eyebrow": "Seu ponto de partida",
+    "profileSelection": {
+      "method": "answer",
+      "stageId": "rotina",
+      "profileKey": "optionId"
     },
     "profiles": {
-      "litoral": {
-        "title": "Seu momento pede horizonte aberto",
-        "description": "Você combina com dias leves, água por perto e uma agenda com espaço para o inesperado. Um refúgio no litoral pode ser exatamente a pausa que faltava.",
-        "image": "assets/result-coast.svg",
-        "alt": "Janela aberta para um litoral ensolarado",
-        "badge": "Alma solar"
+      "documentos": {
+        "title": "Comece pela preparação dos seus documentos.",
+        "description": "Você escolheu uma aplicação ligada a documentos técnicos. Use essa tarefa para experimentar uma preparação com estrutura definida, dados organizados e revisão antes do uso."
       },
-      "montanha": {
-        "title": "Seu próximo destino fica lá no alto",
-        "description": "Novos caminhos, ar puro e a sensação de chegar mais longe movem você. Uma jornada entre montanhas tem tudo para virar uma grande história.",
-        "image": "assets/result-mountain.svg",
-        "alt": "Pessoa contemplando montanhas ao amanhecer",
-        "badge": "Espírito aventureiro"
+      "obra": {
+        "title": "Comece pelos registros e pela comunicação da obra.",
+        "description": "Você escolheu uma aplicação ligada ao acompanhamento de obra. Use essa tarefa para experimentar uma forma de organizar os fatos, preparar o registro e comunicar as informações necessárias."
       },
-      "cidade": {
-        "title": "Você vibra com descobertas urbanas",
-        "description": "Cultura, sabores e encontros inesperados fazem seu roteiro ideal. Uma cidade cheia de personalidade é o cenário perfeito para a sua curiosidade.",
-        "image": "assets/result-city.svg",
-        "alt": "Vista de uma cidade vibrante ao entardecer",
-        "badge": "Explorador urbano"
+      "comercial": {
+        "title": "Comece pela clareza da sua próxima entrega comercial.",
+        "description": "Você escolheu uma aplicação ligada a propostas, orçamentos ou atendimento. Use essa tarefa para organizar o contexto, desenvolver uma primeira versão e conferir escopo, condições e informações antes de enviar."
       },
-      "natureza": {
-        "title": "A natureza é o seu melhor endereço",
-        "description": "Você procura conexão, silêncio e beleza sem filtros. Um destino cercado de verde pode devolver a energia e abrir espaço para novas ideias.",
-        "image": "assets/result-nature.svg",
-        "alt": "Cabana acolhedora em meio à floresta",
-        "badge": "Essência natural"
+      "projetos": {
+        "title": "Comece pela organização das informações do projeto.",
+        "description": "Você escolheu uma aplicação ligada à preparação e à documentação de projetos. Use essa tarefa para organizar dados, explicitar premissas e registrar pontos que precisam de conferência técnica."
       }
+    },
+    "personalization": {
+      "benefit": {
+        "sourceStageId": "melhoria",
+        "contentByAnswer": {
+          "estrutura-inicial": {
+            "title": "Sua prioridade: ter uma estrutura inicial para adaptar.",
+            "description": "Comece definindo as partes que a entrega precisa conter. Depois, desenvolva o conteúdo com os dados e as particularidades do serviço."
+          },
+          "organizar-informacoes": {
+            "title": "Sua prioridade: organizar antes de escrever.",
+            "description": "Comece reunindo os dados disponíveis e separando o que já está confirmado do que ainda precisa ser levantado."
+          },
+          "orientar-ia": {
+            "title": "Sua prioridade: orientar melhor a IA.",
+            "description": "Comece deixando claros a tarefa, o contexto, os dados disponíveis e o formato esperado. Confira se a resposta respeita essas informações."
+          },
+          "padronizar": {
+            "title": "Sua prioridade: padronizar o que se repete.",
+            "description": "Comece por uma tarefa recorrente e defina uma estrutura reutilizável, preservando a adaptação e a revisão de cada caso."
+          }
+        }
+      },
+      "firstApplication": {
+        "sourceStageId": "primeira-aplicacao",
+        "displaySelectedOptionLabel": true,
+        "label": "Sua primeira aplicação",
+        "steps": [
+          "Reúna os dados e as particularidades da tarefa escolhida.",
+          "Selecione a skill ou o comando relacionado e forneça o contexto à IA.",
+          "Confira a resposta, ajuste o conteúdo e valide as informações antes de usar."
+        ]
+      }
+    },
+    "offer": {
+      "eyebrow": "Prumo Civil",
+      "title": "Comece pela sua próxima entrega.",
+      "description": "Use a tarefa que você escolheu como ponto de partida e tenha uma biblioteca para consultar nas próximas demandas da sua rotina.",
+      "deliverables": [
+        {
+          "icon": "ruler-measure",
+          "title": "40 skills de engenharia civil",
+          "description": "Instruções organizadas por tarefas de cálculo e projeto, documentos e laudos, obra e canteiro, comercial e contratos."
+        },
+        {
+          "icon": "terminal-2",
+          "title": "Biblioteca com 700 comandos",
+          "description": "Comandos para consultar e adaptar a situações da rotina profissional."
+        },
+        {
+          "icon": "school",
+          "title": "3 aulas de orientação",
+          "description": "Do primeiro login à rotina de uso, com orientação para começar a aplicar o material."
+        },
+        {
+          "icon": "list-check",
+          "title": "Guia de instalação passo a passo",
+          "description": "Orientações para preparar o acesso e começar a utilizar os materiais."
+        }
+      ],
+      "bonuses": [
+        {
+          "icon": "gavel",
+          "title": "Skill de Licitação Pública",
+          "description": "Apoio à leitura de editais, ao mapeamento de exigências, à identificação de prazos e à organização da documentação."
+        },
+        {
+          "icon": "robot",
+          "title": "Kit de Agentes para ChatGPT",
+          "description": "Versões adaptadas das principais skills para quem prefere utilizar o ChatGPT."
+        },
+        {
+          "icon": "message-exclamation",
+          "title": "Kit de Respostas Difíceis",
+          "description": "Apoio para preparar comunicações sobre cobrança, atraso, mudança de escopo e negociação com fornecedores."
+        }
+      ],
+      "responsibility": "Os materiais apoiam a preparação das entregas. A conferência dos dados, a validação técnica e a responsabilidade profissional continuam com você."
+    },
+    "cta": {
+      "label": "Quero acessar o Prumo Civil",
+      "url": "https://pay.kiwify.com.br/8yIvMel?utm_source=quiz_prumo_civil&utm_medium=referral&utm_campaign=prumo_civil_ia&utm_content=cta_resultado",
+      "target": "_self"
     }
+  },
+  "implementation": {
+    "extensionsToOriginalSchema": [
+      "aida",
+      "transitions",
+      "optionsSource",
+      "optionsByAnswer",
+      "profileSelection",
+      "personalization",
+      "offer"
+    ],
+    "optionsPerQuestion": 4,
+    "questionCount": 6,
+    "transitionsCountAsQuestions": false,
+    "resultUsesProductivityScore": false,
+    "checkoutUrlRequiredBeforePublication": false,
+    "checkoutUrlStatus": "URL real do checkout configurada.",
+    "priceStatus": "Confirmar e exibir o preço vigente junto ao CTA antes da publicação.",
+    "toolRequirementsStatus": "Confirmar e exibir as ferramentas compatíveis e os requisitos de acesso antes da publicação."
   },
   "analytics": {
     "enabled": true,
     "containerId": "",
-    "eventPrefix": "rota_quiz",
+    "eventPrefix": "prumo_civil_quiz",
     "debug": true
   }
 }

@@ -2,10 +2,14 @@ import {
   buildAnalyticsEvent,
   findOption,
   getProgress,
+  getStageOptions,
   getStageContext,
   resolveProfile,
   validateConfig
 } from "./quiz-core.mjs";
+import { TABLER_ICON_PATHS } from "./tabler-icons.mjs";
+
+const SVG_NAMESPACE = "http://www.w3.org/2000/svg";
 
 const elements = {
   card: document.querySelector(".quiz-card"),
@@ -28,12 +32,34 @@ const elements = {
   legend: document.querySelector("#question-legend"),
   options: document.querySelector("#options"),
   validation: document.querySelector("#validation-message"),
+  transition: document.querySelector("#transition-screen"),
+  transitionEyebrow: document.querySelector("#transition-eyebrow"),
+  transitionTitle: document.querySelector("#transition-title"),
+  transitionDescription: document.querySelector("#transition-description"),
+  transitionButton: document.querySelector("#transition-button"),
+  transitionButtonLabel: document.querySelector("#transition-button-label"),
   result: document.querySelector("#result-screen"),
+  resultVisual: document.querySelector("#result-visual"),
   resultImage: document.querySelector("#result-image"),
-  resultBadge: document.querySelector("#result-badge"),
   resultEyebrow: document.querySelector("#result-eyebrow"),
   resultTitle: document.querySelector("#result-title"),
   resultDescription: document.querySelector("#result-description"),
+  resultBenefit: document.querySelector("#result-benefit"),
+  resultBenefitTitle: document.querySelector("#result-benefit-title"),
+  resultBenefitDescription: document.querySelector("#result-benefit-description"),
+  resultApplication: document.querySelector("#result-application"),
+  resultApplicationLabel: document.querySelector("#result-application-label"),
+  resultApplicationValue: document.querySelector("#result-application-value"),
+  resultSteps: document.querySelector("#result-steps"),
+  resultOffer: document.querySelector("#result-offer"),
+  resultOfferEyebrow: document.querySelector("#result-offer-eyebrow"),
+  resultOfferTitle: document.querySelector("#result-offer-title"),
+  resultOfferDescription: document.querySelector("#result-offer-description"),
+  resultDeliverables: document.querySelector("#result-deliverables"),
+  resultBonusesSection: document.querySelector("#result-bonuses-section"),
+  resultBonuses: document.querySelector("#result-bonuses"),
+  resultResponsibility: document.querySelector("#result-responsibility"),
+  resultClosing: document.querySelector("#result-closing"),
   resultCta: document.querySelector("#result-cta"),
   error: document.querySelector("#error-screen"),
   errorMessage: document.querySelector("#error-message"),
@@ -57,12 +83,14 @@ const state = {
   hasStarted: false,
   hasCompleted: false,
   resultProfileId: null,
+  activeTransitionId: null,
+  transitionVisits: Object.create(null),
   transitionLocked: false,
   toastTimer: null
 };
 
 function setVisibleScreen(screen) {
-  [elements.loading, elements.intro, elements.question, elements.result, elements.error].forEach((item) => {
+  [elements.loading, elements.intro, elements.question, elements.transition, elements.result, elements.error].forEach((item) => {
     item.hidden = item !== screen;
   });
   screen.classList.remove("screen-enter");
@@ -110,15 +138,14 @@ function restoreAnswers() {
   try {
     const stored = JSON.parse(localStorage.getItem(getStorageKey()) ?? "null");
     if (!stored || stored.version !== state.config.version || typeof stored.answers !== "object") return;
-    const validStageIds = new Set(state.config.stages.map((stage) => stage.id));
-    state.answers = Object.assign(
-      Object.create(null),
-      Object.fromEntries(Object.entries(stored.answers).filter(([stageId, optionId]) => {
-        if (!validStageIds.has(stageId)) return false;
-        const stage = state.config.stages.find((item) => item.id === stageId);
-        return Boolean(findOption(stage, optionId));
-      }))
-    );
+    const restoredAnswers = Object.create(null);
+
+    for (const stage of state.config.stages) {
+      const optionId = stored.answers[stage.id];
+      if (findOption(stage, optionId, restoredAnswers)) restoredAnswers[stage.id] = optionId;
+    }
+
+    state.answers = restoredAnswers;
   } catch {
     state.answers = Object.create(null);
   }
@@ -152,6 +179,8 @@ function track(suffix, context = {}) {
       progress_percent: null,
       stage_visit_number: null,
       stage_completion_number: null,
+      transition_id: null,
+      transition_visit_number: null,
       option_id: null,
       result_id: null,
       cta_id: null,
@@ -285,9 +314,28 @@ function createGalleryOption(stage, option) {
   return label;
 }
 
+function clearDependentAnswers(sourceStageId) {
+  const sourcesToClear = [sourceStageId];
+  const visited = new Set();
+
+  while (sourcesToClear.length) {
+    const sourceId = sourcesToClear.shift();
+    if (visited.has(sourceId)) continue;
+    visited.add(sourceId);
+
+    state.config.stages.forEach((stage) => {
+      if (stage.optionsSource?.stageId !== sourceId) return;
+      delete state.answers[stage.id];
+      sourcesToClear.push(stage.id);
+    });
+  }
+}
+
 function handleOptionChange(event) {
   const stage = state.config.stages[state.currentIndex];
+  const previousOptionId = state.answers[stage.id];
   state.answers[stage.id] = event.currentTarget.value;
+  if (previousOptionId !== event.currentTarget.value) clearDependentAnswers(stage.id);
   elements.validation.hidden = true;
   elements.options.classList.remove("options-invalid");
   persistAnswers();
@@ -321,7 +369,7 @@ function renderStage({ focus = true } = {}) {
   elements.options.className = `options options-${stage.type}`;
   elements.options.replaceChildren();
 
-  stage.options.forEach((option, index) => {
+  getStageOptions(stage, state.answers).forEach((option, index) => {
     elements.options.append(stage.type === "gallery" ? createGalleryOption(stage, option) : createListOption(stage, option, index));
   });
 
@@ -338,6 +386,69 @@ function renderStage({ focus = true } = {}) {
   });
 
   if (focus) requestAnimationFrame(() => elements.stageTitle.focus({ preventScroll: true }));
+}
+
+function getTransitionAfterStage(stageId) {
+  return state.config.transitions?.find((transition) => transition.afterStageId === stageId) ?? null;
+}
+
+function resolveTransitionContent(transition) {
+  const variant = transition.variants?.find(({ when }) => {
+    return when && state.answers[when.stageId] === when.optionId;
+  });
+  return { ...transition, ...variant };
+}
+
+function renderTransition(transition) {
+  const content = resolveTransitionContent(transition);
+  state.activeTransitionId = transition.id;
+  state.transitionVisits[transition.id] = (state.transitionVisits[transition.id] ?? 0) + 1;
+
+  text(elements.transitionEyebrow, content.eyebrow);
+  text(elements.transitionTitle, content.title);
+  text(elements.transitionDescription, content.description);
+  text(elements.transitionButtonLabel, content.buttonLabel ?? "Continuar");
+  elements.counter.hidden = true;
+  elements.footer.hidden = true;
+  elements.transitionButton.disabled = false;
+  setVisibleScreen(elements.transition);
+  scrollToQuizTop();
+
+  track("transition_viewed", {
+    quiz_id: state.config.quiz.id,
+    stage_id: state.config.stages[state.currentIndex].id,
+    stage_index: state.currentIndex + 1,
+    stage_total: state.config.stages.length,
+    progress_percent: getProgress(state.currentIndex, state.config.stages.length),
+    transition_id: transition.id,
+    transition_visit_number: state.transitionVisits[transition.id]
+  });
+  requestAnimationFrame(() => elements.transitionTitle.focus({ preventScroll: true }));
+}
+
+function continueTransition() {
+  if (state.transitionLocked || !state.activeTransitionId) return;
+  const transitionId = state.activeTransitionId;
+  state.transitionLocked = true;
+  elements.transitionButton.disabled = true;
+  track("transition_completed", {
+    quiz_id: state.config.quiz.id,
+    stage_id: state.config.stages[state.currentIndex].id,
+    stage_index: state.currentIndex + 1,
+    stage_total: state.config.stages.length,
+    transition_id: transitionId
+  });
+
+  window.setTimeout(() => {
+    state.activeTransitionId = null;
+    if (state.currentIndex === state.config.stages.length - 1) {
+      renderResult();
+    } else {
+      state.currentIndex += 1;
+      renderStage();
+    }
+    state.transitionLocked = false;
+  }, window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 120);
 }
 
 function setTransitionLock(locked) {
@@ -370,7 +481,10 @@ function goNext() {
   });
 
   window.setTimeout(() => {
-    if (state.currentIndex === state.config.stages.length - 1) {
+    const transition = getTransitionAfterStage(stage.id);
+    if (transition) {
+      renderTransition(transition);
+    } else if (state.currentIndex === state.config.stages.length - 1) {
       renderResult();
     } else {
       state.currentIndex += 1;
@@ -389,6 +503,7 @@ function goBack() {
 }
 
 function isSafeCtaUrl(url) {
+  if (typeof url !== "string" || !url.trim()) return false;
   try {
     const parsed = new URL(url, window.location.href);
     return ["http:", "https:"].includes(parsed.protocol);
@@ -397,20 +512,116 @@ function isSafeCtaUrl(url) {
   }
 }
 
+function createTablerIcon(iconName) {
+  const svg = document.createElementNS(SVG_NAMESPACE, "svg");
+  svg.classList.add("result-item-icon-svg");
+  svg.setAttribute("viewBox", "0 0 24 24");
+  svg.setAttribute("fill", "none");
+  svg.setAttribute("stroke", "currentColor");
+  svg.setAttribute("stroke-width", "2");
+  svg.setAttribute("stroke-linecap", "round");
+  svg.setAttribute("stroke-linejoin", "round");
+  svg.setAttribute("aria-hidden", "true");
+  svg.setAttribute("focusable", "false");
+
+  for (const pathData of TABLER_ICON_PATHS[iconName] ?? []) {
+    const path = document.createElementNS(SVG_NAMESPACE, "path");
+    path.setAttribute("d", pathData);
+    svg.append(path);
+  }
+
+  return svg;
+}
+
+function createResultItems(container, items, itemClass) {
+  container.replaceChildren();
+  (items ?? []).forEach((item) => {
+    const listItem = document.createElement("li");
+    listItem.className = itemClass;
+    const icon = document.createElement("span");
+    icon.className = "result-item-icon";
+    icon.append(createTablerIcon(item.icon));
+    const copy = document.createElement("div");
+    copy.className = "result-item-copy";
+    const title = document.createElement("h4");
+    const description = document.createElement("p");
+    text(title, item.title);
+    text(description, item.description);
+    copy.append(title, description);
+    listItem.append(icon, copy);
+    container.append(listItem);
+  });
+}
+
+function renderResultPersonalization(result) {
+  const benefitConfig = result.personalization?.benefit;
+  const benefitAnswer = benefitConfig ? state.answers[benefitConfig.sourceStageId] : null;
+  const benefit = benefitConfig?.contentByAnswer?.[benefitAnswer];
+  elements.resultBenefit.hidden = !benefit;
+  if (benefit) {
+    text(elements.resultBenefitTitle, benefit.title);
+    text(elements.resultBenefitDescription, benefit.description);
+  }
+
+  const applicationConfig = result.personalization?.firstApplication;
+  const applicationStage = applicationConfig
+    ? state.config.stages.find((stage) => stage.id === applicationConfig.sourceStageId)
+    : null;
+  const applicationOption = applicationStage
+    ? findOption(applicationStage, state.answers[applicationStage.id], state.answers)
+    : null;
+  elements.resultApplication.hidden = !applicationOption;
+  if (applicationOption) {
+    text(elements.resultApplicationLabel, applicationConfig.label);
+    text(elements.resultApplicationValue, applicationOption.label);
+    elements.resultSteps.replaceChildren();
+    (applicationConfig.steps ?? []).forEach((step) => {
+      const item = document.createElement("li");
+      text(item, step);
+      elements.resultSteps.append(item);
+    });
+  }
+}
+
+function renderResultOffer(result) {
+  const offer = result.offer;
+  elements.resultOffer.hidden = !offer;
+  if (!offer) return;
+
+  text(elements.resultOfferEyebrow, offer.eyebrow);
+  text(elements.resultOfferTitle, offer.title);
+  text(elements.resultOfferDescription, offer.description);
+  createResultItems(elements.resultDeliverables, offer.deliverables, "result-item");
+  createResultItems(elements.resultBonuses, offer.bonuses, "result-item result-item-bonus");
+  elements.resultBonusesSection.hidden = !offer.bonuses?.length;
+  text(elements.resultResponsibility, offer.responsibility);
+  elements.resultResponsibility.hidden = !offer.responsibility;
+  text(elements.resultClosing, result.closing);
+  elements.resultClosing.hidden = !result.closing;
+}
+
 function renderResult() {
   const { result } = state.config;
-  const profileId = resolveProfile(state.config.stages, state.answers, result.profiles);
+  const profileId = resolveProfile(state.config.stages, state.answers, result.profiles, result.profileSelection);
   const profile = result.profiles[profileId];
   state.resultProfileId = profileId;
 
   text(elements.resultEyebrow, result.eyebrow);
-  text(elements.resultBadge, profile.badge ?? "Seu perfil");
   text(elements.resultTitle, profile.title);
   text(elements.resultDescription, profile.description);
-  delete elements.resultImage.dataset.fallbackApplied;
-  elements.resultImage.src = profile.image;
-  elements.resultImage.alt = profile.alt ?? "";
-  elements.resultImage.addEventListener("error", handleImageError, { once: true });
+  const hasProfileImage = typeof profile.image === "string" && profile.image.trim();
+  elements.resultVisual.hidden = !hasProfileImage;
+  if (hasProfileImage) {
+    delete elements.resultImage.dataset.fallbackApplied;
+    elements.resultImage.src = profile.image;
+    elements.resultImage.alt = profile.alt ?? "";
+    elements.resultImage.addEventListener("error", handleImageError, { once: true });
+  } else {
+    elements.resultImage.removeAttribute("src");
+    elements.resultImage.alt = "";
+  }
+  renderResultPersonalization(result);
+  renderResultOffer(result);
   text(elements.resultCta.querySelector("span"), result.cta.label);
 
   if (isSafeCtaUrl(result.cta.url)) {
@@ -477,11 +688,12 @@ function bindEvents() {
   elements.startButton.addEventListener("click", startQuiz);
   elements.nextButton.addEventListener("click", goNext);
   elements.backButton.addEventListener("click", goBack);
+  elements.transitionButton.addEventListener("click", continueTransition);
   elements.retryButton.addEventListener("click", initialize);
   elements.resultCta.addEventListener("click", (event) => {
     if (elements.resultCta.getAttribute("aria-disabled") === "true") {
       event.preventDefault();
-      showToast("Configure uma URL segura para este botão.");
+      showToast("O link de acesso ainda não foi configurado.");
       return;
     }
     track("cta_clicked", {

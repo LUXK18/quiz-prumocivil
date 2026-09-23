@@ -1,0 +1,931 @@
+Quero que você atue como arquiteto de software e desenvolvedor full-stack sênior e construa este projeto completo, com foco absoluto em simplicidade, performance, baixo consumo de recursos e facilidade de hospedagem em uma VM pequena.
+
+Não quero apenas sugestões ou pseudocódigo. Quero que você desenvolva o projeto de forma incremental, criando a estrutura dos arquivos, código funcional, configuração, documentação e instruções de deploy.
+
+# OBJETIVO DO APP
+
+Construir uma aplicação web de "jornada interativa" baseada em etapas configuráveis.
+
+O usuário entra em uma experiência com várias etapas, responde perguntas e avança até uma tela final com resultado e CTA.
+
+Exemplo:
+
+Entrada
+  ↓
+Pergunta
+  ↓
+Pergunta
+  ↓
+Pergunta
+  ↓
+Resultado
+  ↓
+CTA
+
+O conteúdo das jornadas deve ser configurável, preferencialmente através de JSON.
+
+A aplicação deve permitir criar diferentes jornadas sem alterar o código-fonte do frontend.
+
+# PRINCÍPIO MAIS IMPORTANTE
+
+O sistema precisa ser MUITO LEVE.
+
+Ele será hospedado posteriormente em uma VM pequena.
+
+Prioridades, nesta ordem:
+
+1. baixo consumo de RAM
+2. baixo consumo de CPU
+3. frontend com bundle pequeno
+4. poucas dependências
+5. arquitetura simples
+6. fácil manutenção
+7. carregamento rápido
+8. fácil deploy em Linux
+9. boa segurança
+10. boa experiência mobile
+
+Evite soluções enterprise ou abstrações desnecessárias.
+
+Não use Next.js, Nuxt, Angular ou frameworks pesados.
+
+Não use bibliotecas grandes quando HTML/CSS/TypeScript nativo resolver.
+
+Não use um banco complexo se SQLite resolver.
+
+Não use Redis, filas, microsserviços ou infraestrutura distribuída.
+
+Não crie complexidade pensando em uma escala que ainda não existe.
+
+# STACK PREFERENCIAL
+
+Antes de implementar, avalie esta stack:
+
+Frontend:
+- Vite
+- TypeScript
+- HTML/CSS
+- JavaScript/TypeScript nativo
+- sem React se não for realmente necessário
+
+Backend:
+- Go
+- net/http ou framework extremamente pequeno somente se houver benefício real
+- SQLite
+
+Infraestrutura:
+- Linux
+- aplicação compilada em binário
+- SQLite local
+- frontend compilado como arquivos estáticos
+- Caddy ou Nginx como reverse proxy, se realmente necessário
+- systemd para manter o backend rodando
+
+Idealmente quero:
+
+1 processo do backend
++
+arquivos estáticos do frontend
++
+1 arquivo SQLite
+
+Se for possível servir o próprio frontend estático pelo backend Go sem prejudicar a arquitetura, considere isso para reduzir ainda mais a infraestrutura.
+
+Não use Docker como requisito obrigatório.
+
+Docker pode ser fornecido apenas como opção adicional.
+
+# ARQUITETURA CONCEITUAL
+
+A aplicação gira em torno deste modelo:
+
+Journey
+  └── Steps
+       └── Options
+
+Uma Journey possui várias Steps.
+
+Os tipos iniciais de Step são:
+
+1. question
+2. content
+3. result
+
+Uma pergunta possui dois layouts possíveis:
+
+- list
+- grid
+
+Esses NÃO devem ser dois componentes de domínio diferentes.
+
+Exemplo:
+
+{
+  "type": "question",
+  "layout": "list"
+}
+
+ou:
+
+{
+  "type": "question",
+  "layout": "grid"
+}
+
+# EXEMPLO DE CONFIGURAÇÃO
+
+Uma jornada pode ter aproximadamente esta estrutura:
+
+{
+  "id": "diagnostico-principal",
+
+  "name": "Diagnóstico principal",
+
+  "branding": {
+    "logo": "/assets/logo.svg",
+    "title": "Encontre a melhor opção"
+  },
+
+  "steps": [
+    {
+      "id": "objetivo",
+      "type": "question",
+      "layout": "list",
+      "title": "Qual é seu objetivo?",
+      "description": "Escolha uma opção",
+      "autoAdvance": true,
+
+      "options": [
+        {
+          "id": "economia",
+          "label": "Economizar",
+          "tags": ["price"]
+        },
+        {
+          "id": "performance",
+          "label": "Maior desempenho",
+          "tags": ["performance"]
+        }
+      ]
+    },
+
+    {
+      "id": "preferencia",
+      "type": "question",
+      "layout": "grid",
+      "title": "Qual você prefere?",
+      "autoAdvance": true,
+
+      "options": [
+        {
+          "id": "a",
+          "label": "Opção A",
+          "image": "/assets/a.webp"
+        },
+        {
+          "id": "b",
+          "label": "Opção B",
+          "image": "/assets/b.webp"
+        }
+      ]
+    },
+
+    {
+      "id": "resultado",
+      "type": "result",
+      "title": "Encontramos uma opção para você",
+      "description": "Descrição do resultado.",
+      "image": "/assets/result.webp",
+
+      "cta": {
+        "label": "Continuar",
+        "url": "https://example.com"
+      }
+    }
+  ]
+}
+
+Use esse JSON apenas como referência.
+
+Melhore o schema se necessário, mas mantenha-o simples e legível.
+
+# ENGINE DA JORNADA
+
+O frontend deve possuir um Journey Engine pequeno responsável por:
+
+- carregar a configuração
+- identificar a etapa atual
+- guardar respostas
+- avançar
+- voltar
+- calcular progresso
+- decidir resultado
+- disparar eventos de analytics
+
+Evite espalhar essa lógica pelos componentes.
+
+Quero algo conceitualmente parecido com:
+
+JourneyEngine
+- currentStep
+- answers
+- progress
+- next()
+- previous()
+- answer()
+- getResult()
+
+# PROGRESSO
+
+Nunca quero configurar manualmente:
+
+25%
+50%
+75%
+100%
+
+O progresso deve ser calculado automaticamente.
+
+Exemplo:
+
+currentStep / totalRelevantSteps
+
+Adicionar ou remover etapas não pode exigir alterar percentuais.
+
+# AUTO ADVANCE
+
+Por padrão, perguntas de escolha única devem avançar automaticamente.
+
+Fluxo:
+
+usuário seleciona opção
+↓
+salva resposta
+↓
+dispara analytics
+↓
+pequeno feedback visual
+↓
+avança
+
+Configuração:
+
+"autoAdvance": true
+
+Se:
+
+"autoAdvance": false
+
+mostrar botão:
+
+Continuar
+
+# VOLTAR
+
+O usuário deve poder voltar para uma etapa anterior.
+
+Ao alterar uma resposta anterior, o estado das etapas dependentes deve continuar consistente.
+
+# RESULTADOS
+
+Quero suporte inicial para resultados baseados em tags simples.
+
+Exemplo de resposta:
+
+{
+  "id": "economia",
+  "tags": ["price"]
+}
+
+Ao final podem existir resultados como:
+
+{
+  "id": "produto-economico",
+  "when": ["price"]
+}
+
+Mantenha inicialmente o motor de regras muito simples.
+
+Não quero criar um workflow engine.
+
+Não implemente uma DSL complexa.
+
+Se perceber que o sistema de tags é suficiente para o MVP, permaneça nele.
+
+# ANALYTICS / GOOGLE TAG MANAGER
+
+A aplicação deve possuir uma camada centralizada de analytics.
+
+Não espalhe chamadas para dataLayer por dezenas de arquivos.
+
+Crie algo como:
+
+analytics.track(...)
+
+Eventos padrão:
+
+journey_started
+step_viewed
+step_answered
+journey_completed
+cta_clicked
+
+Exemplo:
+
+window.dataLayer.push({
+  event: "step_answered",
+  journey_id: "diagnostico-principal",
+  step_id: "preferencia",
+  step_index: 2,
+  answer_id: "a"
+})
+
+O GTM Container ID deve ser configurável.
+
+Não quero configurar manualmente um evento diferente para cada pergunta.
+
+# PERSISTÊNCIA
+
+Durante a jornada, as respostas podem inicialmente ficar no navegador.
+
+Avalie usar:
+
+sessionStorage
+
+ou:
+
+localStorage
+
+Prefira sessionStorage caso seja suficiente.
+
+Se o usuário atualizar a página durante a jornada, idealmente deve ser possível continuar de onde estava.
+
+Permita limpar o estado quando a jornada terminar ou quando iniciar novamente.
+
+# ADMINISTRAÇÃO
+
+Preciso de um painel administrativo simples.
+
+Não quero um page builder complexo.
+
+O painel deve permitir:
+
+- listar jornadas
+- criar jornada
+- editar jornada
+- excluir jornada
+- ativar/desativar jornada
+
+Dentro de uma jornada:
+
+- adicionar etapa
+- editar etapa
+- excluir etapa
+- reordenar etapas
+
+Campos básicos da etapa:
+
+- título
+- descrição
+- tipo
+- layout
+- imagem
+- opções
+- autoAdvance
+
+Para opções:
+
+- label
+- imagem
+- tags
+
+Resultado:
+
+- título
+- descrição
+- imagem
+- CTA
+- regras simples
+
+Para reordenação, não adicione uma biblioteca gigante de drag-and-drop.
+
+Se uma implementação simples de subir/descer etapa for significativamente mais leve, prefira:
+
+↑
+↓
+
+ao invés de drag-and-drop.
+
+# JSON
+
+Mesmo existindo painel administrativo, quero manter uma representação JSON limpa da jornada.
+
+Considere armazenar a configuração da jornada como JSON no SQLite se isso simplificar bastante a arquitetura.
+
+Por exemplo:
+
+journeys
+
+id
+slug
+name
+active
+config_json
+created_at
+updated_at
+
+Analise se isso é mais adequado do que normalizar cada step e option em dezenas de tabelas.
+
+Priorize simplicidade.
+
+# API
+
+Crie uma API REST pequena.
+
+Algo próximo de:
+
+GET    /api/journeys
+POST   /api/journeys
+
+GET    /api/journeys/:id
+PUT    /api/journeys/:id
+DELETE /api/journeys/:id
+
+GET    /api/public/journeys/:slug
+
+Evite endpoints desnecessários.
+
+# ROTA PÚBLICA
+
+Quero conseguir acessar jornadas desta forma:
+
+/j/diagnostico-principal
+
+ou formato equivalente.
+
+A URL deve permitir carregar a jornada correta pelo slug.
+
+# PAINEL ADMINISTRATIVO
+
+Algo como:
+
+/admin
+
+Não faça um CMS complexo.
+
+Interface objetiva.
+
+Exemplo:
+
+Jornadas
+
+Diagnóstico Principal
+Ativa
+[Editar]
+
+Pesquisa X
+Inativa
+[Editar]
+
+[+ Nova jornada]
+
+Dentro:
+
+Jornada: Diagnóstico Principal
+
+1. Objetivo         [Lista]     ↑ ↓ Editar Excluir
+2. Preferência      [Galeria]   ↑ ↓ Editar Excluir
+3. Perfil           [Lista]     ↑ ↓ Editar Excluir
+4. Resultado        [Final]     ↑ ↓ Editar Excluir
+
+[+ Adicionar etapa]
+
+# AUTENTICAÇÃO DO ADMIN
+
+Preciso impedir acesso público ao painel.
+
+Implemente uma solução pequena e segura.
+
+Evite bibliotecas enormes de autenticação.
+
+Considere:
+
+- usuário administrador definido por variável de ambiente
+- senha armazenada usando hash seguro
+- sessão via cookie HttpOnly
+- Secure em produção
+- SameSite
+
+Não armazene senha em texto puro.
+
+Explique a decisão adotada.
+
+Não implemente OAuth no MVP.
+
+# DESIGN
+
+Mobile first.
+
+Visual limpo.
+
+Layout centralizado.
+
+Largura máxima semelhante a uma experiência mobile/formulário.
+
+Estrutura:
+
+Logo
+
+Título
+
+Descrição
+
+Conteúdo da etapa
+
+Progresso
+
+A experiência deve funcionar muito bem em:
+
+375px
+390px
+430px
+
+e também desktop.
+
+No desktop, não precisa ocupar a tela inteira.
+
+Use algo aproximadamente como:
+
+max-width: 520px
+
+Não precisa ser exatamente isso se houver uma decisão melhor.
+
+# IMAGENS
+
+Priorize:
+
+WebP
+AVIF quando apropriado
+
+Use:
+
+loading="lazy"
+
+quando fizer sentido.
+
+Não baixe bibliotecas apenas para imagens.
+
+Evite imagens gigantes.
+
+# CSS
+
+Quero CSS simples.
+
+Pode usar:
+
+CSS nativo
+
+Não use Tailwind se ele não trouxer um benefício realmente relevante.
+
+Não use Bootstrap.
+
+Não use Material UI.
+
+Não use bibliotecas de componentes grandes.
+
+Crie poucos componentes reutilizáveis.
+
+# ACESSIBILIDADE
+
+Garanta o básico:
+
+- HTML semântico
+- navegação por teclado
+- focus visible
+- labels
+- contraste adequado
+- botões reais
+- alt nas imagens
+- aria somente quando necessário
+
+Não transforme tudo em div clicável.
+
+# PERFORMANCE
+
+Quero metas aproximadas:
+
+- frontend inicial muito pequeno
+- JavaScript mínimo
+- poucos requests
+- sem dependências desnecessárias
+- imagens otimizadas
+- sem fontes externas obrigatórias
+- sem trackers além dos configurados
+- evitar layout shift
+
+Não carregue o código do admin na página pública se for possível separar os bundles.
+
+Quero que:
+
+/j/*
+
+seja extremamente leve.
+
+O painel:
+
+/admin
+
+pode ser um pouco maior porque não impacta visitantes.
+
+# SEO
+
+SEO não é prioridade porque a experiência é principalmente interativa.
+
+Ainda assim:
+
+- title correto
+- description básica
+- viewport
+- HTML válido
+
+Não implemente SSR somente por SEO.
+
+# SEGURANÇA
+
+Considere pelo menos:
+
+- validação de JSON recebido pela API
+- limite de tamanho das requisições
+- proteção contra XSS
+- escaping correto
+- headers básicos de segurança
+- cookies seguros
+- CSRF se necessário
+- SQL parametrizado
+- não expor segredos no frontend
+- rate limit somente onde houver necessidade real
+
+Evite adicionar 15 middlewares se poucas medidas simples resolverem.
+
+# BANCO DE DADOS
+
+SQLite.
+
+Configure:
+
+- WAL mode se apropriado
+- migrations simples
+- índices apenas onde necessários
+
+O banco provavelmente terá poucos registros.
+
+Não otimize prematuramente.
+
+# LOGS
+
+Logs simples e estruturados.
+
+Não introduza stack ELK, observabilidade distribuída ou serviços externos.
+
+Quero conseguir acompanhar algo semelhante a:
+
+timestamp
+level
+method
+path
+status
+duration
+
+# CONFIGURAÇÕES
+
+Use variáveis de ambiente.
+
+Exemplo:
+
+APP_ENV
+APP_PORT
+APP_BASE_URL
+DATABASE_PATH
+ADMIN_USERNAME
+ADMIN_PASSWORD_HASH
+SESSION_SECRET
+GTM_CONTAINER_ID
+
+Crie:
+
+.env.example
+
+Nunca commite segredos reais.
+
+# ESTRUTURA DE PROJETO
+
+Antes de desenvolver, proponha uma estrutura pequena.
+
+Algo parecido com:
+
+/cmd
+/internal
+/web
+  /public
+  /src
+/data
+/migrations
+
+Mas não siga isso cegamente.
+
+Escolha a estrutura mais simples que continue organizada.
+
+# DEPLOY
+
+O projeto será hospedado em uma VM Linux.
+
+Quero instruções completas para deploy.
+
+Cenário esperado:
+
+Ubuntu/Debian
+↓
+binário Go
+↓
+SQLite
+↓
+frontend estático
+↓
+systemd
+↓
+Caddy/Nginx
+↓
+HTTPS
+
+Quero um exemplo de:
+
+systemd service
+
+e configuração do proxy reverso.
+
+Se Caddy simplificar muito HTTPS, pode preferir Caddy.
+
+Explique também como:
+
+- compilar frontend
+- compilar backend
+- enviar para servidor
+- configurar banco
+- configurar env
+- iniciar serviço
+- reiniciar serviço
+- atualizar aplicação
+- fazer backup
+- restaurar backup
+
+# BACKUP
+
+Como usamos SQLite, quero uma estratégia simples de backup.
+
+Exemplo:
+
+/var/lib/nome-app/app.db
+
+para:
+
+/var/backups/nome-app/
+
+Documente uma forma segura de realizar o backup sem corromper o SQLite.
+
+# NÃO QUERO
+
+Não use:
+
+- Kubernetes
+- Redis
+- RabbitMQ
+- Kafka
+- Elasticsearch
+- microservices
+- GraphQL
+- Next.js
+- serverless
+- Firebase
+- Supabase
+- MongoDB
+- PostgreSQL no MVP
+- Redux
+- bibliotecas de estado pesadas
+- component libraries grandes
+- page builders
+- workflow engines
+
+a menos que você demonstre uma necessidade técnica incontornável.
+
+# TESTES
+
+Não quero uma suíte enorme.
+
+Implemente testes focados nas partes críticas:
+
+Backend:
+- validação da jornada
+- CRUD
+- autenticação
+- regras de resultado
+
+Frontend:
+- JourneyEngine
+- cálculo de progresso
+- seleção de resultado
+
+Priorize testes unitários rápidos.
+
+# DESENVOLVIMENTO
+
+Quero trabalhar em etapas.
+
+ETAPA 1
+Analise os requisitos e proponha a arquitetura.
+
+Mostre:
+
+- componentes
+- tecnologias
+- fluxo
+- estrutura de arquivos
+- modelo do banco
+- formato final do JSON
+- decisões para manter o projeto leve
+
+Não comece com centenas de arquivos.
+
+ETAPA 2
+Crie o esqueleto funcional.
+
+ETAPA 3
+Implemente backend + SQLite.
+
+ETAPA 4
+Implemente frontend público.
+
+ETAPA 5
+Implemente painel administrativo.
+
+ETAPA 6
+Implemente analytics/GTM.
+
+ETAPA 7
+Implemente autenticação.
+
+ETAPA 8
+Testes.
+
+ETAPA 9
+Build de produção.
+
+ETAPA 10
+Deploy em VM.
+
+A cada etapa:
+
+1. explique rapidamente o que será feito
+2. implemente
+3. mostre os arquivos criados/alterados
+4. valide se compila
+5. execute os testes existentes
+6. corrija erros antes de continuar
+
+Não deixe erros para serem corrigidos "depois".
+
+# REGRA DE OURO
+
+Quando houver duas maneiras de resolver alguma coisa:
+
+A) solução sofisticada com muitas dependências
+B) solução simples, explícita e fácil de manter
+
+prefira B.
+
+Não confunda arquitetura moderna com arquitetura complexa.
+
+O objetivo é um sistema pequeno que possa ficar anos funcionando em uma VM barata.
+
+# MÉTRICAS AO FINAL
+
+Quando o projeto estiver funcionando, quero uma seção informando:
+
+- tamanho do binário backend
+- tamanho total do frontend buildado
+- tamanho do JS carregado pela jornada pública
+- quantidade de dependências frontend
+- quantidade de dependências backend
+- uso aproximado de RAM do backend em idle
+- número de processos necessários em produção
+
+Se alguma dessas métricas estiver ruim, revise a implementação antes de considerar o projeto finalizado.
+
+# IMPORTANTE
+
+Não fique apenas me fazendo perguntas.
+
+Quando existir uma escolha razoável, tome uma decisão técnica e explique-a brevemente.
+
+Só faça perguntas quando uma informação realmente impedir o desenvolvimento.
+
+Comece agora pela ETAPA 1: arquitetura técnica detalhada e enxuta.
