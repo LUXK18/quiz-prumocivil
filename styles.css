@@ -866,6 +866,15 @@ input:checked + .option-visual .option-check svg {
   line-height: 1.65;
 }
 
+.result-product-image {
+  display: block;
+  width: 100%;
+  max-width: 803px;
+  height: auto;
+  margin: 24px auto 0;
+  object-fit: contain;
+}
+
 .result-offer-group {
   margin-top: 34px;
 }
@@ -1289,6 +1298,10 @@ input:checked + .option-visual .option-check svg {
 
   .result-offer-group {
     margin-top: 28px;
+  }
+
+  .result-product-image {
+    margin-top: 18px;
   }
 
   .footer-result {
